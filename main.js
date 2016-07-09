@@ -15,21 +15,21 @@ console.log(currentWord);
 
 // create new instance of Word class for current Word-to-guess
 var wordCheck = new Word(currentWord);
-console.log("wordCheck.allGuesses: " + wordCheck.allGuesses);
 
 // set allGuesses to a blank array.  This will keep track of all user guesses
-var allGuesses = ["b"];
+var allGuesses = ["w", "y"];
 
 // create new instance of Letters class for current Word-to-guess
 var letterCheck = new Letters(currentWord);
+console.log("WELCOME TO HANGMAN!  YOU HAVE 10 TRIES TO GUESS THIS WORD")
 console.log("letterCheck.displayWord(allGuesses): " + letterCheck.displayWord(allGuesses));
-
-var limit = 3;
+var limit = 10;
 var count = 0;
+var userWon = false;
 
 function playGame(){
 // inquire user - please guess a letter
-    if (count<limit) {
+    if ((count<limit) && (!userWon)) {
         inquirer.prompt([{
             name: "letter",
             message: "Please enter a letter: "
@@ -39,24 +39,35 @@ function playGame(){
 
             	// check to see that user entered a letter
                 if (!wordCheck.validInput(guess)) {
-                	console.log("Please enter a letter.");
+                	console.log("Please make sure you enter a letter.");
                 	// check to see if user already guessed that letter
-                } else if (wordCheck.alreadyGuessed(guess,allGuesses)) {
+                } else if (wordCheck.alreadyGuessed(guess, allGuesses)) {
             		console.log("You already guessed that letter.  Try again.");
             		console.log("Letters you have already guessed: " + allGuesses);
                 	// check to see if user guessed a correct letter              	
-                } else if (!wordCheck.inWord(guess)) {
-                	console.log("You guessed a correct letter.");
-                	console.log("letterCheck.displayWord(allGuesses): " + letterCheck.displayWord(allGuesses));	
                 } else {
+                	allGuesses.push(guess);
+                	if (wordCheck.inWord(guess)) {
+                		console.log("You guessed a correct letter.");
+                		console.log("letterCheck.displayWord(allGuesses): " + letterCheck.displayWord(allGuesses));	
+              			if (wordCheck.userWon(allGuesses)) {
+              				userWon=true;
+              			}
+                	} else {
                 	console.log("Sorry - that letter is not in the word.");
                 	count++;
+                	}
                 }
-
                 playGame();
             });
     } else {
-    console.log("you lose");
+    	if (userWon) {
+    		console.log("hurrah! You won!");
+            console.log("letterCheck.displayWord(allGuesses): " + letterCheck.displayWord(allGuesses));	
+        } else if (count >= limit) {
+        	console.log("too bad.  You lose.");
+        }
+        console.log("letterCheck.displayWord(allGuesses): " + letterCheck.displayWord(allGuesses));	
     }
 }
 
