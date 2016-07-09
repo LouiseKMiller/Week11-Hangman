@@ -34,5 +34,13 @@ WordCheck.prototype.inWord = function (userGuess) {
 	return false;
 };
 
+WordCheck.prototype.userWon = function (allGuessesParam) {
+	for (var i=0; (i < this.currentWord.length); i++) {
+		if (!allGuessesParam.includes(this.currentWord.charAt(i))) {
+			return false;
+		}
+	}
+	return true;
+};
 module.exports = WordCheck;
 //
