@@ -18,7 +18,7 @@ function WordCheck(currentWord) {
 }
 
 WordCheck.prototype.validInput = function(userGuess) {
-	return ((userGuess.charCodeAt(0) > 96) && (userGuess.charCodeAt(0) < 123));
+	return ((userGuess.length==1) && (userGuess.charCodeAt(0) > 96) && (userGuess.charCodeAt(0) < 123));
 };
 
 WordCheck.prototype.alreadyGuessed = function(userGuess, allGuesses) {
@@ -35,8 +35,9 @@ WordCheck.prototype.inWord = function (userGuess) {
 };
 
 WordCheck.prototype.userWon = function (allGuessesParam) {
-	for (var i=0; (i < this.currentWord.length); i++) {
-		if (!allGuessesParam.includes(this.currentWord.charAt(i))) {
+	var smushed = this.currentWord.split(' ').join('');
+	for (var i=0; (i < smushed.length); i++) {
+		if (!allGuessesParam.includes(smushed.charAt(i))) {
 			return false;
 		}
 	}
